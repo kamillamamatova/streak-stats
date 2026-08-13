@@ -8,6 +8,18 @@ The one I previously had that I found online kept on glitching and whatever, and
 
 ![GitHub streak stats dark](assets/github-streak-stats-dark.svg)
 
+![GitHub streak stats green](assets/github-streak-stats-green.svg)
+
+![GitHub streak stats green dark](assets/github-streak-stats-green-dark.svg)
+
+![GitHub streak stats blue](assets/github-streak-stats-blue.svg)
+
+![GitHub streak stats blue dark](assets/github-streak-stats-blue-dark.svg)
+
+![GitHub streak stats purple](assets/github-streak-stats-purple.svg)
+
+![GitHub streak stats purple dark](assets/github-streak-stats-purple-dark.svg)
+
 ## Use In Your Profile README
 
 Add this to your profile README:
@@ -20,6 +32,17 @@ Dark mode version:
 
 ```md
 ![GitHub streak stats dark](https://raw.githubusercontent.com/kamillamamatova/streak-stats/master/assets/github-streak-stats-dark.svg)
+```
+
+Other color versions:
+
+```md
+![GitHub streak stats green](https://raw.githubusercontent.com/kamillamamatova/streak-stats/master/assets/github-streak-stats-green.svg)
+![GitHub streak stats green dark](https://raw.githubusercontent.com/kamillamamatova/streak-stats/master/assets/github-streak-stats-green-dark.svg)
+![GitHub streak stats blue](https://raw.githubusercontent.com/kamillamamatova/streak-stats/master/assets/github-streak-stats-blue.svg)
+![GitHub streak stats blue dark](https://raw.githubusercontent.com/kamillamamatova/streak-stats/master/assets/github-streak-stats-blue-dark.svg)
+![GitHub streak stats purple](https://raw.githubusercontent.com/kamillamamatova/streak-stats/master/assets/github-streak-stats-purple.svg)
+![GitHub streak stats purple dark](https://raw.githubusercontent.com/kamillamamatova/streak-stats/master/assets/github-streak-stats-purple-dark.svg)
 ```
 
 If your remote repository uses `main` instead of `master`, replace `master` in the URL with `main`.

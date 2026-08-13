@@ -2,34 +2,28 @@ import { mkdir, writeFile } from "node:fs/promises";
 
 const username = process.env.STATS_USERNAME || "kamillamamatova";
 const token = process.env.STATS_TOKEN || process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
-const output = process.env.STATS_OUTPUT || "assets/github-streak-stats.svg";
-const darkOutput = process.env.STATS_DARK_OUTPUT || "assets/github-streak-stats-dark.svg";
-const accent = process.env.STATS_ACCENT || "#ec4899";
-const accentSoft = process.env.STATS_ACCENT_SOFT || "#fbcfe8";
-const dark = process.env.STATS_DARK || "#831843";
-const muted = process.env.STATS_MUTED || "#9d174d";
-const bg = process.env.STATS_BG || "#fff5fb";
-
-const lightTheme = {
-  accent,
-  accentSoft,
-  bg,
+const themes = [
+  {
+  output: "assets/github-streak-stats.svg",
+  accent: "#ec4899",
+  accentSoft: "#fbcfe8",
+  bg: "#fff5fb",
   border: "#f9a8d4",
   dot: "#f9a8d4",
   dotSoft: "#fbcfe8",
-  muted,
+  muted: "#9d174d",
   panel: "#fffafd",
   starSoft: "#fb7185",
   suffix: "#be185d",
-  text: dark,
+  text: "#831843",
   tile: "#ffffff",
   track: "#fce7f3",
-};
-
-const darkTheme = {
-  accent: process.env.STATS_DARK_ACCENT || "#f472b6",
-  accentSoft: process.env.STATS_DARK_ACCENT_SOFT || "#831843",
-  bg: process.env.STATS_DARK_BG || "#190817",
+  },
+  {
+  output: "assets/github-streak-stats-dark.svg",
+  accent: "#f472b6",
+  accentSoft: "#831843",
+  bg: "#190817",
   border: "#db2777",
   dot: "#f472b6",
   dotSoft: "#831843",
@@ -40,7 +34,104 @@ const darkTheme = {
   text: "#fdf2f8",
   tile: "#381431",
   track: "#4a173f",
-};
+  },
+  {
+  output: "assets/github-streak-stats-green.svg",
+  accent: "#22c55e",
+  accentSoft: "#bbf7d0",
+  bg: "#f0fdf4",
+  border: "#86efac",
+  dot: "#86efac",
+  dotSoft: "#bbf7d0",
+  muted: "#166534",
+  panel: "#fbfffc",
+  starSoft: "#34d399",
+  suffix: "#15803d",
+  text: "#14532d",
+  tile: "#ffffff",
+  track: "#dcfce7",
+  },
+  {
+  output: "assets/github-streak-stats-green-dark.svg",
+  accent: "#4ade80",
+  accentSoft: "#166534",
+  bg: "#07170d",
+  border: "#16a34a",
+  dot: "#4ade80",
+  dotSoft: "#166534",
+  muted: "#bbf7d0",
+  panel: "#0f2417",
+  starSoft: "#86efac",
+  suffix: "#dcfce7",
+  text: "#f0fdf4",
+  tile: "#16351f",
+  track: "#1d4d2b",
+  },
+  {
+  output: "assets/github-streak-stats-blue.svg",
+  accent: "#38bdf8",
+  accentSoft: "#bae6fd",
+  bg: "#f0f9ff",
+  border: "#7dd3fc",
+  dot: "#7dd3fc",
+  dotSoft: "#bae6fd",
+  muted: "#075985",
+  panel: "#f8fcff",
+  starSoft: "#60a5fa",
+  suffix: "#0369a1",
+  text: "#0c4a6e",
+  tile: "#ffffff",
+  track: "#e0f2fe",
+  },
+  {
+  output: "assets/github-streak-stats-blue-dark.svg",
+  accent: "#60a5fa",
+  accentSoft: "#1d4ed8",
+  bg: "#07111f",
+  border: "#2563eb",
+  dot: "#60a5fa",
+  dotSoft: "#1d4ed8",
+  muted: "#bfdbfe",
+  panel: "#0c1b33",
+  starSoft: "#38bdf8",
+  suffix: "#dbeafe",
+  text: "#eff6ff",
+  tile: "#13294b",
+  track: "#1e3a8a",
+  },
+  {
+  output: "assets/github-streak-stats-purple.svg",
+  accent: "#a855f7",
+  accentSoft: "#e9d5ff",
+  bg: "#faf5ff",
+  border: "#d8b4fe",
+  dot: "#d8b4fe",
+  dotSoft: "#e9d5ff",
+  muted: "#6b21a8",
+  panel: "#fdfaff",
+  starSoft: "#c084fc",
+  suffix: "#7e22ce",
+  text: "#581c87",
+  tile: "#ffffff",
+  track: "#f3e8ff",
+  },
+  {
+  output: "assets/github-streak-stats-purple-dark.svg",
+  accent: "#c084fc",
+  accentSoft: "#6b21a8",
+  bg: "#13081f",
+  border: "#9333ea",
+  dot: "#c084fc",
+  dotSoft: "#6b21a8",
+  muted: "#e9d5ff",
+  panel: "#211033",
+  starSoft: "#a78bfa",
+  suffix: "#f3e8ff",
+  text: "#faf5ff",
+  tile: "#2f1649",
+  track: "#4c1d95",
+  },
+];
 
 if (!token) {
   throw new Error(
@@ -237,16 +328,12 @@ const years = await getContributionYears();
 const yearly = await Promise.all(years.map(getYearDays));
 const days = yearly.flatMap((year) => year.days);
 const stats = summarize(days);
-const lightSvg = createSvg(stats, lightTheme);
-const darkSvg = createSvg(stats, darkTheme);
+for (const theme of themes) {
+  await mkdir(theme.output.split("/").slice(0, -1).join("/") || ".", { recursive: true });
+  await writeFile(theme.output, createSvg(stats, theme), "utf8");
+  console.log(`Wrote ${theme.output}`);
+}
 
-await mkdir(output.split("/").slice(0, -1).join("/") || ".", { recursive: true });
-await writeFile(output, lightSvg, "utf8");
-await mkdir(darkOutput.split("/").slice(0, -1).join("/") || ".", { recursive: true });
-await writeFile(darkOutput, darkSvg, "utf8");
-
-console.log(`Wrote ${output}`);
-console.log(`Wrote ${darkOutput}`);
 console.log(`Total contributions: ${formatNumber(stats.total)}`);
 console.log(`Current streak: ${stats.currentStreak}`);
 console.log(`Highest streak: ${stats.highestStreak}`);
