@@ -1,0 +1,12 @@
+{
+  "name": "github-streak-stats",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "node scripts/generate-stats.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

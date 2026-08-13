@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="760" height="210" viewBox="0 0 760 210" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">GitHub streak stats placeholder</title>
+  <desc id="desc">The stats card will update after the GitHub Action runs with a token.</desc>
+  <rect width="760" height="210" rx="8" fill="#ffffff" stroke="#e5e7eb"/>
+  <rect x="22" y="22" width="716" height="166" rx="8" fill="#f9fafb" stroke="#eef2f7"/>
+  <circle cx="55" cy="54" r="11" fill="#14b8a6"/>
+  <text x="78" y="61" fill="#111827" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="20" font-weight="750">kamillamamatova's GitHub Streak</text>
+  <text x="78" y="82" fill="#6b7280" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="12">Waiting for the first GitHub Action run.</text>
+  <g font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">
+    <g transform="translate(175 92)">
+      <text text-anchor="middle" fill="#111827" font-size="30" font-weight="700">--</text>
+      <text y="28" text-anchor="middle" fill="#6b7280" font-size="13" font-weight="600">Total Contributions</text>
+      <text y="48" text-anchor="middle" fill="#6b7280" font-size="12">all-time</text>
+    </g>
+    <g transform="translate(380 92)">
+      <text text-anchor="middle" fill="#111827" font-size="30" font-weight="700">--</text>
+      <text y="28" text-anchor="middle" fill="#6b7280" font-size="13" font-weight="600">Current Streak</text>
+      <text y="48" text-anchor="middle" fill="#6b7280" font-size="12">days</text>
+    </g>
+    <g transform="translate(585 92)">
+      <text text-anchor="middle" fill="#111827" font-size="30" font-weight="700">--</text>
+      <text y="28" text-anchor="middle" fill="#6b7280" font-size="13" font-weight="600">Highest Streak</text>
+      <text y="48" text-anchor="middle" fill="#6b7280" font-size="12">days</text>
+    </g>
+  </g>
+  <path d="M52 164h656" stroke="#e5e7eb" stroke-linecap="round"/>
+  <path d="M52 164h80" stroke="#14b8a6" stroke-width="4" stroke-linecap="round"/>
+</svg>
