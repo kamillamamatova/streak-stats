@@ -33,12 +33,9 @@ jobs:
         env:
           STATS_USERNAME: kamillamamatova
           STATS_TOKEN: ${{ secrets.STATS_TOKEN || github.token }}
-          STATS_ACCENT: "#ec4899"
-          STATS_ACCENT_SOFT: "#fbcfe8"
-          STATS_BG: "#fff5fb"
 
       - name: Commit updated stats
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "Update GitHub streak stats"
-          file_pattern: assets/github-streak-stats.svg
+          file_pattern: assets/github-streak-stats.svg assets/github-streak-stats-dark.svg

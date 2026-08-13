@@ -6,12 +6,20 @@ The one I previously had that I found online kept on glitching and whatever, and
 
 ![GitHub streak stats](assets/github-streak-stats.svg)
 
+![GitHub streak stats dark](assets/github-streak-stats-dark.svg)
+
 ## Use In Your Profile README
 
 Add this to your profile README:
 
 ```md
 ![GitHub streak stats](https://raw.githubusercontent.com/kamillamamatova/streak-stats/master/assets/github-streak-stats.svg)
+```
+
+Dark mode version:
+
+```md
+![GitHub streak stats dark](https://raw.githubusercontent.com/kamillamamatova/streak-stats/master/assets/github-streak-stats-dark.svg)
 ```
 
 If your remote repository uses `main` instead of `master`, replace `master` in the URL with `main`.

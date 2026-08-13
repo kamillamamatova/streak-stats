@@ -3,11 +3,44 @@ import { mkdir, writeFile } from "node:fs/promises";
 const username = process.env.STATS_USERNAME || "kamillamamatova";
 const token = process.env.STATS_TOKEN || process.env.GH_TOKEN || process.env.GITHUB_TOKEN;
 const output = process.env.STATS_OUTPUT || "assets/github-streak-stats.svg";
+const darkOutput = process.env.STATS_DARK_OUTPUT || "assets/github-streak-stats-dark.svg";
 const accent = process.env.STATS_ACCENT || "#ec4899";
 const accentSoft = process.env.STATS_ACCENT_SOFT || "#fbcfe8";
 const dark = process.env.STATS_DARK || "#831843";
 const muted = process.env.STATS_MUTED || "#9d174d";
 const bg = process.env.STATS_BG || "#fff5fb";
+
+const lightTheme = {
+  accent,
+  accentSoft,
+  bg,
+  border: "#f9a8d4",
+  dot: "#f9a8d4",
+  dotSoft: "#fbcfe8",
+  muted,
+  panel: "#fffafd",
+  starSoft: "#fb7185",
+  suffix: "#be185d",
+  text: dark,
+  tile: "#ffffff",
+  track: "#fce7f3",
+};
+
+const darkTheme = {
+  accent: process.env.STATS_DARK_ACCENT || "#f472b6",
+  accentSoft: process.env.STATS_DARK_ACCENT_SOFT || "#831843",
+  bg: process.env.STATS_DARK_BG || "#190817",
+  border: "#db2777",
+  dot: "#f472b6",
+  dotSoft: "#831843",
+  muted: "#f9a8d4",
+  panel: "#2a1026",
+  starSoft: "#fb7185",
+  suffix: "#fbcfe8",
+  text: "#fdf2f8",
+  tile: "#381431",
+  track: "#4a173f",
+};
 
 if (!token) {
   throw new Error(
@@ -159,17 +192,17 @@ function escapeHtml(value) {
     .replaceAll('"', "&quot;");
 }
 
-function statBlock({ x, label, value, suffix }) {
+function statBlock({ x, label, value, suffix, theme }) {
   return `
     <g transform="translate(${x} 132)">
-      <rect x="-96" y="-32" width="192" height="94" rx="18" fill="#ffffff" stroke="${accentSoft}"/>
-      <text text-anchor="middle" fill="${dark}" font-size="34" font-weight="800">${escapeHtml(value)}</text>
-      <text y="29" text-anchor="middle" fill="${muted}" font-size="13" font-weight="700">${escapeHtml(label)}</text>
-      <text y="48" text-anchor="middle" fill="#be185d" font-size="12" font-weight="600">${escapeHtml(suffix)}</text>
+      <rect x="-96" y="-32" width="192" height="94" rx="18" fill="${theme.tile}" stroke="${theme.accentSoft}"/>
+      <text text-anchor="middle" fill="${theme.text}" font-size="34" font-weight="800">${escapeHtml(value)}</text>
+      <text y="29" text-anchor="middle" fill="${theme.muted}" font-size="13" font-weight="700">${escapeHtml(label)}</text>
+      <text y="48" text-anchor="middle" fill="${theme.suffix}" font-size="12" font-weight="600">${escapeHtml(suffix)}</text>
     </g>`;
 }
 
-function createSvg(stats) {
+function createSvg(stats, theme) {
   const currentSuffix = pluralize(stats.currentStreak, "day");
   const highestSuffix = pluralize(stats.highestStreak, "day");
   const streakRatio = stats.highestStreak > 0 ? stats.currentStreak / stats.highestStreak : 0;
@@ -179,23 +212,23 @@ function createSvg(stats) {
 <svg width="800" height="270" viewBox="0 0 800 270" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
   <title id="title">GitHub contribution streak stats for ${escapeHtml(username)}</title>
   <desc id="desc">Total contributions: ${formatNumber(stats.total)}. Current streak: ${stats.currentStreak} ${currentSuffix}. Highest streak: ${stats.highestStreak} ${highestSuffix}.</desc>
-  <rect width="800" height="270" rx="26" fill="${bg}"/>
-  <rect x="18" y="18" width="764" height="234" rx="24" fill="#fffafd" stroke="#f9a8d4" stroke-width="2"/>
-  <path d="M59 41l5 12 13 1-10 8 3 13-11-7-11 7 3-13-10-8 13-1 5-12z" fill="${accent}"/>
-  <path d="M721 49l4 9 10 1-8 6 2 10-8-5-9 5 2-10-8-6 10-1 5-9z" fill="#fb7185"/>
-  <circle cx="104" cy="222" r="5" fill="#f9a8d4"/>
-  <circle cx="694" cy="222" r="5" fill="#f9a8d4"/>
-  <circle cx="124" cy="222" r="3" fill="#fbcfe8"/>
-  <circle cx="674" cy="222" r="3" fill="#fbcfe8"/>
-  <text x="400" y="58" text-anchor="middle" fill="${dark}" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="25" font-weight="850">${escapeHtml(username)}'s GitHub Streak</text>
+  <rect width="800" height="270" rx="26" fill="${theme.bg}"/>
+  <rect x="18" y="18" width="764" height="234" rx="24" fill="${theme.panel}" stroke="${theme.border}" stroke-width="2"/>
+  <path d="M59 41l5 12 13 1-10 8 3 13-11-7-11 7 3-13-10-8 13-1 5-12z" fill="${theme.accent}"/>
+  <path d="M721 49l4 9 10 1-8 6 2 10-8-5-9 5 2-10-8-6 10-1 5-9z" fill="${theme.starSoft}"/>
+  <circle cx="104" cy="222" r="5" fill="${theme.dot}"/>
+  <circle cx="694" cy="222" r="5" fill="${theme.dot}"/>
+  <circle cx="124" cy="222" r="3" fill="${theme.dotSoft}"/>
+  <circle cx="674" cy="222" r="3" fill="${theme.dotSoft}"/>
+  <text x="400" y="58" text-anchor="middle" fill="${theme.text}" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="25" font-weight="850">${escapeHtml(username)}'s GitHub Streak</text>
   <g font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif">
-    ${statBlock({ x: 174, label: "TOTAL", value: formatNumber(stats.total), suffix: "contributions" })}
-    ${statBlock({ x: 400, label: "CURRENT", value: formatNumber(stats.currentStreak), suffix: currentSuffix })}
-    ${statBlock({ x: 626, label: "BEST", value: formatNumber(stats.highestStreak), suffix: highestSuffix })}
+    ${statBlock({ x: 174, label: "TOTAL", value: formatNumber(stats.total), suffix: "contributions", theme })}
+    ${statBlock({ x: 400, label: "CURRENT", value: formatNumber(stats.currentStreak), suffix: currentSuffix, theme })}
+    ${statBlock({ x: 626, label: "BEST", value: formatNumber(stats.highestStreak), suffix: highestSuffix, theme })}
   </g>
-  <text x="400" y="207" text-anchor="middle" fill="#be185d" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="12" font-weight="700">current streak / best streak</text>
-  <rect x="218" y="218" width="364" height="12" rx="6" fill="#fce7f3"/>
-  <rect x="218" y="218" width="${streakBarWidth}" height="12" rx="6" fill="${accent}"/>
+  <text x="400" y="207" text-anchor="middle" fill="${theme.suffix}" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="12" font-weight="700">current streak / best streak</text>
+  <rect x="218" y="218" width="364" height="12" rx="6" fill="${theme.track}"/>
+  <rect x="218" y="218" width="${streakBarWidth}" height="12" rx="6" fill="${theme.accent}"/>
 </svg>
 `;
 }
@@ -204,12 +237,16 @@ const years = await getContributionYears();
 const yearly = await Promise.all(years.map(getYearDays));
 const days = yearly.flatMap((year) => year.days);
 const stats = summarize(days);
-const svg = createSvg(stats);
+const lightSvg = createSvg(stats, lightTheme);
+const darkSvg = createSvg(stats, darkTheme);
 
 await mkdir(output.split("/").slice(0, -1).join("/") || ".", { recursive: true });
-await writeFile(output, svg, "utf8");
+await writeFile(output, lightSvg, "utf8");
+await mkdir(darkOutput.split("/").slice(0, -1).join("/") || ".", { recursive: true });
+await writeFile(darkOutput, darkSvg, "utf8");
 
 console.log(`Wrote ${output}`);
+console.log(`Wrote ${darkOutput}`);
 console.log(`Total contributions: ${formatNumber(stats.total)}`);
 console.log(`Current streak: ${stats.currentStreak}`);
 console.log(`Highest streak: ${stats.highestStreak}`);
