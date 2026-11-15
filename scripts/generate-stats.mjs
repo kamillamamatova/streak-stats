@@ -242,6 +242,7 @@ function summarize(days) {
   let currentStreak = 0;
   const cursor = new Date(Date.UTC(today.getUTCFullYear(), today.getUTCMonth(), today.getUTCDate()));
   const todayKey = isoDate(cursor);
+  const earliestDate = sortedDates[0];
 
   if ((byDate.get(todayKey) ?? 0) === 0) {
     cursor.setUTCDate(cursor.getUTCDate() - 1);
@@ -251,9 +252,13 @@ function summarize(days) {
     const date = isoDate(cursor);
     const count = byDate.get(date);
 
-    if (count === undefined && date > sortedDates.at(-1)) {
+    if (earliestDate && count === undefined && date > sortedDates.at(-1)) {
       cursor.setUTCDate(cursor.getUTCDate() - 1);
       continue;
+    }
+
+    if (!earliestDate || date < earliestDate) {
+      break;
     }
 
     if ((count ?? 0) <= 0) {
