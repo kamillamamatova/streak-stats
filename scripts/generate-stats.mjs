@@ -144,17 +144,28 @@ const isoDate = (date) => date.toISOString().slice(0, 10);
 const currentYear = today.getUTCFullYear();
 
 async function graphql(query, variables = {}) {
-  const response = await fetch("https://api.github.com/graphql", {
-    method: "POST",
-    headers: {
-      authorization: `Bearer ${token}`,
-      "content-type": "application/json",
-      "user-agent": "github-streak-stats-readme-generator",
-    },
-    body: JSON.stringify({ query, variables }),
-  });
+  const request = async (authToken) => {
+    const response = await fetch("https://api.github.com/graphql", {
+      method: "POST",
+      headers: {
+        authorization: `Bearer ${authToken}`,
+        "content-type": "application/json",
+        "user-agent": "github-streak-stats-readme-generator",
+      },
+      body: JSON.stringify({ query, variables }),
+    });
 
-  const payload = await response.json();
+    return { response, payload: await response.json() };
+  };
+
+  let result = await request(token);
+  const fallbackToken = process.env.GITHUB_TOKEN;
+  if (result.response.status === 401 && fallbackToken && fallbackToken !== token) {
+    console.warn("STATS_TOKEN was rejected (401); retrying with the workflow GITHUB_TOKEN.");
+    result = await request(fallbackToken);
+  }
+
+  const { response, payload } = result;
   if (!response.ok || payload.errors) {
     const detail = payload.errors?.map((error) => error.message).join("; ");
     throw new Error(detail || `GitHub API request failed with ${response.status}`);
